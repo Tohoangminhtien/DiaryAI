@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error {{ error_code }}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8d7da;
+        }
+
+        .error-container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .error-container h1 {
+            color: #721c24;
+            font-size: 48px;
+        }
+
+        .error-container p {
+            font-size: 18px;
+            color: #721c24;
+        }
+
+        .error-container a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            background: #0078d7;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .error-container a:hover {
+            background: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Error {{ error_code }}</h1>
+        <p>{{ message }}</p>
+        <a href="/login">Go to Login</a>
+    </div>
+</body>
+</html>
