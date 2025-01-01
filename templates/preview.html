@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Diary Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='preview.css') }}">
+</head>
+
+<body>
+    <h1>📒📘📗Diary Assistant🤖💌</h1>
+    <hr>
+    <form action="/preview" method="POST">
+        <div class="container">
+            <div class="story">
+                <h3>Your story</h3>
+                <textarea name="user-content" placeholder="Enter your story" required>{{user_content}}</textarea>
+            </div>
+
+            <div class="rich-story">
+                <h3>Generate story</h3>
+                <textarea name="ai-content" placeholder="You must enter your story first">{{ai_content}}</textarea>
+            </div>
+        </div>
+        <div class="checkbox-container">
+            <input type="checkbox" name="improve" id="improve">
+            <label for="improve">I accept this AI story</label>
+        </div>
+        <div class="submit-container">
+            <input type="submit" value="Generate">
+        </div>
+    </form>
+</body>
+
+</html>

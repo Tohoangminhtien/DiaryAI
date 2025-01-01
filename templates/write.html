@@ -1,74 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Write a Letter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            height: 200px;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-    </style>
+    <title>Write</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='write.css') }}">
 </head>
 
 <body>
+    <form action="/write" method="post" onsubmit="return submitForm()">
 
-    <div class="container">
-        <h1>Write a Letter</h1>
-        <form action="/write" method="POST">
-            <label for="content">Content:</label>
-            
-            <textarea id="content" name="content" required></textarea>
+        <div class="container" contenteditable="true"></div>
+        <input type="hidden" id="editableContent" name="content">
+        
+        <div class="center-content">
+            <a href="/preview">Use our AI to improve your story</a>
+        </div>
+        <div class="center-content">
+            <input type="submit" value="Send">
+        </div>
 
-            <button type="submit">Save</button>
-        </form>
-    </div>
+    </form>
 
+    <script>
+        function submitForm() {
+            var content = document.querySelector('.container').innerHTML;
+            document.getElementById('editableContent').value = content;
+            return true;
+        }
+        document.querySelector('.container').addEventListener('paste', function (e) {
+            e.preventDefault();
+            var paste = e.clipboardData.getData('text/plain');
+            document.execCommand('insertText', false, paste);
+        });
+    </script>
 </body>
 
 </html>

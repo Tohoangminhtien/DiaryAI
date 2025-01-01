@@ -1,157 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-
-        .calendar {
-            width: 90vw;
-            max-width: 1200px;
-            height: 90vh;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            background: white;
-        }
-
-        .header {
-            background: #444;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            font-size: 24px;
-            position: relative;
-        }
-
-        .logout-button {
-            position: absolute;
-            right: 20px;
-            top: 10px;
-            background: #dc3545;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .logout-button:hover {
-            background: #c82333;
-        }
-
-        .nav-buttons {
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .nav-buttons a {
-            text-decoration: none;
-            color: white;
-            background: #0078d7;
-            padding: 5px 15px;
-            border-radius: 5px;
-            margin: 0 5px;
-        }
-
-        .nav-buttons a:hover {
-            background: #005bb5;
-        }
-
-        .days {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            grid-auto-rows: 1fr;
-            gap: 2px;
-            padding: 10px;
-        }
-
-        .day-header {
-            font-weight: bold;
-            text-align: center;
-            background: #e9ecef;
-            padding: 10px 0;
-        }
-
-        .day {
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .day a {
-            text-decoration: none;
-            color: black;
-            display: block;
-            width: 100%;
-            height: 100%;
-            line-height: 2.5;
-        }
-
-        .day a:hover {
-            background: #d0e0f0;
-        }
-
-        .day.has-diary {
-            background-color: #28a745; /* Màu xanh lá */
-            color: white;
-        }
-
-        .day.has-diary a {
-            color: white;
-        }
-
-        .day.has-diary a:hover {
-            background: #1e7e34;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='calendar.css') }}">
 </head>
+
 <body>
     <div class="calendar">
         <div class="header">
             <h2>{{ current_date.strftime('%B %Y') }}</h2>
-            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
             <div class="nav-buttons">
-                <a href="?month={{ current_date.month }}&year={{ current_date.year }}&prev=true">← Tháng Trước</a>
-                <a href="?month={{ current_date.month }}&year={{ current_date.year }}&next=true">Tháng Sau →</a>
+                <a href="?month={{ current_date.month }}&year={{ current_date.year }}&prev=true">← Previous</a>
+                <a href="?month={{ current_date.month }}&year={{ current_date.year }}&next=true">Next →</a>
             </div>
         </div>
+
         <div class="days">
-            <div class="day-header">CN</div>
-            <div class="day-header">T2</div>
-            <div class="day-header">T3</div>
-            <div class="day-header">T4</div>
-            <div class="day-header">T5</div>
-            <div class="day-header">T6</div>
-            <div class="day-header">T7</div>
+            <div class="day-header">Sunday</div>
+            <div class="day-header">Monday</div>
+            <div class="day-header">Tuesday</div>
+            <div class="day-header">Wednesday</div>
+            <div class="day-header">Thursday</div>
+            <div class="day-header">Friday</div>
+            <div class="day-header">Saturday</div>
 
             {% for i in range((current_date.weekday() + 1) % 7) %}
-                <div class="day"></div>
+            <div class="day"></div>
             {% endfor %}
-            
-            {% for day in range(1, (current_date.replace(month=current_date.month % 12 + 1, day=1) - timedelta(days=1)).day + 1) %}
-                {% set day_entry = (current_date.year, current_date.month, day) %}
-                <div class="day {% if day_entry in diary_entries %}has-diary{% endif %}">
-                    <a href="{{ url_for('router', year=current_date.year, month=current_date.month, day=day) }}">{{ day }}</a>
-                </div>
+
+            {% for day in range(1, (current_date.replace(month=current_date.month % 12 + 1, day=1) -
+            timedelta(days=1)).day + 1) %}
+            {% set day_entry = (current_date.year, current_date.month, day) %}
+            <div class="day {% if day_entry in diary_entries %}has-diary{% endif %}">
+                <a href="{{ url_for('router', year=current_date.year, month=current_date.month, day=day) }}">{{ day
+                    }}</a>
+            </div>
             {% endfor %}
         </div>
     </div>
 </body>
+
 </html>

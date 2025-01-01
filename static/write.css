@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    width: 60%;
+    margin: 50px auto;
+    border: 2px solid #ddd;
+    background: repeating-linear-gradient(white, white 48px, #ccc 49px, white 50px);
+    line-height: 50px;
+    font-size: 15px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 150vh;
+    outline: none;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+.container:focus {
+    outline: none;
+}
+
+/* Style for the link */
+a {
+    font-size: 16px;
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+a:hover {
+    color: #d35400;
+    text-decoration: underline;
+}
+
+/* Style for the submit button */
+input[type="submit"] {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #d35400;
+    transform: translateY(-2px);
+}
+
+input[type="submit"]:active {
+    background-color: #e67e22;
+    transform: translateY(2px);
+}
+
+/* Center content */
+.center-content {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, session
 from datetime import datetime, timedelta
 import pandas as pd
 import os
+from langchain_openai import ChatOpenAI
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'
@@ -60,7 +61,13 @@ def calendar():
             month -= 1
 
     current_date = datetime(year, month, 1)
-    return render_template('calendar.html', current_date=current_date, timedelta=timedelta)
+    # Thêm thông tin về ngày đã viết
+    diary_entries = []
+    DIARIES_FOLDER = f"user/{session['user']}"
+    for filename in os.listdir(DIARIES_FOLDER):
+        day, month, year = map(int, filename[:-4].split('_'))
+        diary_entries.append((year, month, day))
+    return render_template('calendar.html', current_date=current_date, timedelta=timedelta, diary_entries=diary_entries)
 
 
 def check_login():
@@ -70,6 +77,8 @@ def check_login():
 
 @app.route('/direct')
 def router():
+    # Thêm check login
+    check_login()
     # Kiểm tra thời gian
     day = request.args.get('day')
     month = request.args.get('month')
@@ -112,8 +121,7 @@ def read_diary():
 
     file_path = f"user/{session['user']}/{day}_{month}_{year}.txt"
     with open(file_path, 'r', encoding='utf-8') as file:
-        raw = file.read()
-        content = raw.replace('\n', '<br>')
+        content = file.read()
     return render_template('read.html', content=content, time=f'{day}/{month}/{year}')
 
 
@@ -133,12 +141,65 @@ def write_diary():
         file_path = f"user/{session['user']}/{day}_{month}_{year}.txt"
 
         with open(file_path, 'w', encoding='utf-8') as file:
+            content = content.replace('<div>', '\n').replace('</div>', '')
             file.write(content)
 
         session.pop('day', None)
         session.pop('month', None)
         session.pop('year', None)
         return redirect(url_for('calendar'))
+
+
+def llm(text: str):
+    key = "your_key"
+    
+    llm = ChatOpenAI(
+        temperature=0,
+        openai_api_key=key,
+        model='gpt-4o-mini'
+    )
+
+    prompt = f"""
+    Nhiệm vụ: Hãy viết lại văn phong của văn bản.
+    Hướng dẫn:
+    - Sửa lại chính tả
+    - Thêm các yếu tố thời tiết bay bổng như gió, mây, trời (tối đa 2 cái). Tuyệt đối không thêm các yếu tố chưa chắc chắn như mưa, bão...
+    - Thêm các emoji hài hước mà phù hợp với nội dung
+    - Nếu có phân biệt sáng trưa chiều tối đêm thì tách ra dòng tiếp theo, không thêm dấu **
+    Văn bản:
+    {text}
+    """
+
+    return llm.invoke(prompt).content
+
+
+@app.route('/preview', methods=['GET', 'POST'])
+def preview():
+    check_login()
+    if request.method == 'GET':
+        return render_template('preview.html')
+    else:
+        if 'improve' in request.form:
+            content = request.form['ai-content']
+            day = session['day']
+            month = session['month']
+            year = session['year']
+
+            file_path = f"user/{session['user']}/{day}_{month}_{year}.txt"
+
+            with open(file_path, 'w', encoding='utf-8') as file:
+                content = content.replace('\r\n\r\n', '\n\n')
+                file.write(content)
+
+            session.pop('day', None)
+            session.pop('month', None)
+            session.pop('year', None)
+            return redirect(url_for('calendar'))
+
+        user_content = request.form['user-content']
+        ai_content = llm(user_content)
+
+        return render_template('preview.html', ai_content=ai_content, user_content=user_content)
 
 
 @app.route('/logout')
@@ -149,7 +210,7 @@ def logout():
 
 @app.errorhandler(Exception)
 def handle_exception(error):
-    return render_template('error.html', error_code=500, message="Something went wrong!"), 500
+    return render_template('error.html'), 500
 
 
 if __name__ == '__main__':

@@ -6,6 +6,7 @@
 ## Road map
 1. Cập nhật AI
 2. Nâng cấp UI/UX
+3. Thêm các tính năng user
 ## Author
 *To Hoang Minh Tien*
 
