@@ -11,38 +11,57 @@
 </head>
 
 <body>
-    <div class="calendar">
-        <div class="header">
-            <h2>{{ current_date.strftime('%B %Y') }}</h2>
-            <div class="nav-buttons">
-                <a href="?month={{ current_date.month }}&year={{ current_date.year }}&prev=true">← Previous</a>
-                <a href="?month={{ current_date.month }}&year={{ current_date.year }}&next=true">Next →</a>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        <div class="menu-item">👤 <span>User: {{user_name}}</span></div>
+        <div class="menu-item">🔑 <span>Change Password</span></div>
+        <div class="menu-item" onclick="window.location.href='/logout'">🚪 <span>Logout</span></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="calendar">
+            <div class="header">
+                <h2>{{ current_date.strftime('%B %Y') }}</h2>
+                <div class="nav-buttons">
+                    <a href="?month={{ current_date.month }}&year={{ current_date.year }}&prev=true">← Previous</a>
+                    <a href="?month={{ current_date.month }}&year={{ current_date.year }}&next=true">Next →</a>
+                </div>
             </div>
-        </div>
 
-        <div class="days">
-            <div class="day-header">Sunday</div>
-            <div class="day-header">Monday</div>
-            <div class="day-header">Tuesday</div>
-            <div class="day-header">Wednesday</div>
-            <div class="day-header">Thursday</div>
-            <div class="day-header">Friday</div>
-            <div class="day-header">Saturday</div>
+            <div class="days">
+                <div class="day-header">Sunday</div>
+                <div class="day-header">Monday</div>
+                <div class="day-header">Tuesday</div>
+                <div class="day-header">Wednesday</div>
+                <div class="day-header">Thursday</div>
+                <div class="day-header">Friday</div>
+                <div class="day-header">Saturday</div>
 
-            {% for i in range((current_date.weekday() + 1) % 7) %}
-            <div class="day"></div>
-            {% endfor %}
+                {% for i in range((current_date.weekday() + 1) % 7) %}
+                <div class="day"></div>
+                {% endfor %}
 
-            {% for day in range(1, (current_date.replace(month=current_date.month % 12 + 1, day=1) -
-            timedelta(days=1)).day + 1) %}
-            {% set day_entry = (current_date.year, current_date.month, day) %}
-            <div class="day {% if day_entry in diary_entries %}has-diary{% endif %}">
-                <a href="{{ url_for('router', year=current_date.year, month=current_date.month, day=day) }}">{{ day
-                    }}</a>
+                {% for day in range(1, (current_date.replace(month=current_date.month % 12 + 1, day=1) -
+                timedelta(days=1)).day + 1) %}
+                {% set day_entry = (current_date.year, current_date.month, day) %}
+                <div class="day {% if day_entry in diary_entries %}has-diary{% endif %}">
+                    <a href="{{ url_for('router', year=current_date.year, month=current_date.month, day=day) }}">{{ day
+                        }}</a>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            document.querySelector('.content').classList.toggle('collapsed');
+        }
+    </script>
 </body>
 
 </html>

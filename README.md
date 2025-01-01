@@ -1,12 +1,13 @@
-# Ứng dụng web viết nhật ký.
+# Web Application for Journaling.
 
-## Tính năng
-- Chỉ cho phép mỗi ngày được viết 1 lần
-- Tốc độ truy xuất nhanh, không sử dụng database
-## Road map
-1. Cập nhật AI
-2. Nâng cấp UI/UX
-3. Thêm các tính năng user
+## Features
+- Allows only one entry per day
+- Fast access speed, no database used
+![home_page](asset/home_page.png)
+## Upcoming Features
+1. AI Integration
+2. UI/UX Improvements
+3. Additional User Features
 ## Author
 *To Hoang Minh Tien*
 

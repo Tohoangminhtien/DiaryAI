@@ -67,7 +67,7 @@ def calendar():
     for filename in os.listdir(DIARIES_FOLDER):
         day, month, year = map(int, filename[:-4].split('_'))
         diary_entries.append((year, month, day))
-    return render_template('calendar.html', current_date=current_date, timedelta=timedelta, diary_entries=diary_entries)
+    return render_template('calendar.html', current_date=current_date, timedelta=timedelta, diary_entries=diary_entries, user_name=session['user'])
 
 
 def check_login():
